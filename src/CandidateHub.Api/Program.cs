@@ -1,3 +1,4 @@
+using CandidateHub.Api.Extensions;
 using CandidateHub.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,9 @@ builder.Services.AddSwaggerGen();
 // Configure Database
 builder.Services.AddDbContext<AppDbContext>(option =>
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register service
+builder.Services.AddCustomServices();
 
 var app = builder.Build();
 
