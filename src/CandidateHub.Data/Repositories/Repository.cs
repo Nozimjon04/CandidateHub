@@ -11,10 +11,10 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditabl
     private readonly DbSet<TEntity> dbSet;
     private readonly AppDbContext dbContext;
 
-    public Repository(AppDbContext dbContext, DbSet<TEntity> dbSet)
+    public Repository(AppDbContext dbContext)
     {
-        this.dbSet = dbSet;
         this.dbContext = dbContext;
+        this.dbSet = dbContext.Set<TEntity>();
     }
 
     public async Task<bool> DeleteAsync(long id, CancellationToken cancellationToken = default)

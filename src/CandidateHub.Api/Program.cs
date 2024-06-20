@@ -1,4 +1,5 @@
 using CandidateHub.Api.Extensions;
+using CandidateHub.Api.Middlewares;
 using CandidateHub.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,14 +20,22 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 // Register service
 builder.Services.AddCustomServices();
 
+// CORS
+//builder.Services.ConfigureCors();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+//app.UseCors("AllowAll");
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
