@@ -29,7 +29,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI();
 }
 
-
 // Updates db based on latest migration
 app.ApplyMigrations();
 

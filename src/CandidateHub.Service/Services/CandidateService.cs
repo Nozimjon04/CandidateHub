@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CandidateHub.Service.DTOs;
 using CandidateHub.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using CandidateHub.Service.Interfaces;
 using CandidateHub.Data.IRepositories;
 
@@ -22,10 +21,8 @@ public class CandidateService : ICandidateService
     {
 
         // Check Candidate existing with Email
-        var candidate = await this.candidateRepository.SelectAll()
-            .Where(c => c.Email == dto.Email)
-            .FirstOrDefaultAsync(cancellationToken);
-
+        var candidate = await this.candidateRepository.SelectAsync(c => c.Email == dto.Email);
+        
         // if user is exist, user updated
         if (candidate is not null)
         {
@@ -36,10 +33,11 @@ public class CandidateService : ICandidateService
         {
             candidate = this.mapper.Map<Candidate>(dto);
             candidate.CreatedAt = DateTime.UtcNow;
-            candidate =  await this.candidateRepository.InsertAsync(candidate);
+            candidate = await this.candidateRepository.InsertAsync(candidate);
         }
 
         await this.candidateRepository.SaveChangeAsync();
         return candidate;
     }
+
 }
