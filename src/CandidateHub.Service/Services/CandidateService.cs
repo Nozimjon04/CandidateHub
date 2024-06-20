@@ -18,13 +18,13 @@ public class CandidateService : ICandidateService
         this.candidateRepository = candidateRepository;
     }
 
-    public async Task<bool> AddAsync(CandidateForCreationDto dto, CancellationToken cancellationToken = default)
+    public async Task<Candidate> AddAsync(CandidateForCreationDto dto, CancellationToken cancellationToken = default)
     {
 
         // Check Candidate existing with Email
         var candidate = await this.candidateRepository.SelectAll()
             .Where(c => c.Email == dto.Email)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         // if user is exist, user updated
         if (candidate is not null)
@@ -34,12 +34,12 @@ public class CandidateService : ICandidateService
         }
         else
         {
-            var mappedCandidate = this.mapper.Map<Candidate>(dto);
-            mappedCandidate.CreatedAt = DateTime.UtcNow;
-            await this.candidateRepository.InsertAsync(mappedCandidate);
+            candidate = this.mapper.Map<Candidate>(dto);
+            candidate.CreatedAt = DateTime.UtcNow;
+            candidate =  await this.candidateRepository.InsertAsync(candidate);
         }
 
         await this.candidateRepository.SaveChangeAsync();
-        return true;
+        return candidate;
     }
 }

@@ -5,13 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 // Configure Database
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -21,7 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddCustomServices();
 
 // CORS
-//builder.Services.ConfigureCors();
+builder.Services.ConfigureCors();
 
 var app = builder.Build();
 
@@ -33,7 +30,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 
-//app.UseCors("AllowAll");
+// Updates db based on latest migration
+app.ApplyMigrations();
+
+app.UseCors("AllowAll");
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 

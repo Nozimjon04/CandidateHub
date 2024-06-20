@@ -1,8 +1,9 @@
-﻿using CandidateHub.Service.DTOs;
+﻿using CandidateHub.Domain.Entities;
+using CandidateHub.Service.DTOs;
 
 namespace CandidateHub.Service.Interfaces;
 
 public interface ICandidateService
 {
-    public Task<bool> AddAsync(CandidateForCreationDto dto, CancellationToken cancellationToken = default);
+    public Task<Candidate> AddAsync(CandidateForCreationDto dto, CancellationToken cancellationToken = default);
 }
